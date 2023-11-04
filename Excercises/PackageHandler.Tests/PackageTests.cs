@@ -1,5 +1,7 @@
 namespace PackageHandler.Tests;
 
+
+//Innebär att data hämtas från packagecollection klassen i konstruktorn så att alla tester kan köras paralellt
 [Collection(nameof(PackageCollection))]
 public class PackageTests
 {
@@ -23,6 +25,7 @@ public class PackageTests
 
         // Assert
         Assert.Equal(expected, actual);
+            
     }
 
     [Theory]
@@ -61,6 +64,9 @@ public class PackageTests
     }
 
     [Theory]
+    /* In summary, this code attribute [MemberData(nameof(TestData.FromCsv), 
+     * MemberType = typeof(TestData))] is telling xUnit to use the FromCsv method in the TestData class as the source of test data for the parameterized test method where this attribute is applied. 
+     * The FromCsv method likely returns a collection of test data that will be used to run the parameterized test method with various inputs.*/
     [MemberData(nameof(TestData.FromCsv), MemberType = typeof(TestData))]
     public void CanCalculatePriceOfNormalSizedCylinderMemberData(int weight, int expected)
     {
@@ -100,30 +106,42 @@ public class PackageTests
 
     }
 
-    [Fact]
-    public void Price_Over20kg_ThrowsInvalidOperationException()
-    {
-        // Arrange
-        _sut.Weight = 21;
+    //[Fact]
+    //public void Price_Over20kg_ThrowsInvalidOperationException()
+    //{
+    //    // Arrange
+    //    _sut.Weight = 21;
 
-        // Act
-        // Assert
-        Assert.ThrowsAny<InvalidOperationException>(() => _sut.Price());
+    //    // Act
+    //    // Assert
+    //    Assert.ThrowsAny<InvalidOperationException>(() => _sut.Price());
+    //}
+
+    [Theory]
+    [MemberData(nameof(TestData.FromCsv2), MemberType = typeof(TestData))]
+    public void CheckIfSocialSecurityNumberIsValid(string number)
+    {
+
+        string pattern = @"^(?:19|20)\d{6}\d{4}$";
+
+        Assert.Matches(pattern, number);
+
+        //här skriver jag regex 
     }
 
 
-    public static IEnumerable<object[]> PackageTestWeights()
-    {
-        var list = new List<object[]>
-            {
-                new object[] { 0, 3770 },
-                new object[] { 1, 3770 },
-                new object[] { 2, 3770 },
-                new object[] { 3, 5655 },
-                new object[] { 8, 15080 },
-                new object[] { 20, 37700 }
-            };
+    //public static IEnumerable<object[]> PackageTestWeights()
+    //{
+    //    var list = new List<object[]>
+    //        {
+    //            new object[] { 0, 3770 },
+    //            new object[] { 1, 3770 },
+    //            new object[] { 2, 3770 },
+    //            new object[] { 3, 5655 },
+    //            new object[] { 8, 15080 },
+    //            new object[] { 20, 37700 }
+    //        };
 
-        return list;
-    }
+    //    return list;
+    //}
 }

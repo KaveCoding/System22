@@ -19,6 +19,7 @@ namespace PackageHandler.Tests
             return list.GetEnumerator();
         }
 
+        //Kör metoden ovan så att man får tillbaka object arrayerna när man instansierar klassen
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
     }
 }
